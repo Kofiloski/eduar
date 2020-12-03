@@ -15,6 +15,8 @@ Each main screen game uses different aspects of the AR capability of the app.
 I do not own any of the artwork (AR objects) in the app.
 
 # Requirements:
- iOS 12
- Swift 5
- Cocoapods 1.9.1
+- iOS 12
+
+- Swift 5
+
+- Cocoapods 1.9.1
