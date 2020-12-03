@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--MapController-->
+        <scene sceneID="NZp-hF-SUV">
+            <objects>
+                <viewController storyboardIdentifier="MapController" id="z5N-dz-O29" userLabel="MapController" customClass="MapController" customModule="EduAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="83g-nI-YMr">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" showsBuildings="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T1H-9W-7to">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <connections>
+                                    <outlet property="delegate" destination="z5N-dz-O29" id="Bl4-Rw-kmi"/>
+                                </connections>
+                            </mapView>
+                            <view clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nro-1y-9Bm" userLabel="Buttons View">
+                                <rect key="frame" x="103.5" y="60" width="207" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JGC-rh-W91">
+                                        <rect key="frame" x="0.0" y="0.0" width="103.5" height="50"/>
+                                        <state key="normal" title="AR">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="presentARDirections:" destination="z5N-dz-O29" eventType="touchUpInside" id="ZPi-Bh-hPP"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BL7-u1-n3l" userLabel="White Separator">
+                                        <rect key="frame" x="103.5" y="0.0" width="1" height="50"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="1" id="wr2-3q-R0Q"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zM5-Xn-Yz8">
+                                        <rect key="frame" x="103.5" y="0.0" width="103.5" height="50"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Map">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="zM5-Xn-Yz8" firstAttribute="leading" secondItem="BL7-u1-n3l" secondAttribute="leading" id="9qw-Fa-bM5"/>
+                                    <constraint firstAttribute="bottom" secondItem="JGC-rh-W91" secondAttribute="bottom" id="Dyp-ya-vBi"/>
+                                    <constraint firstItem="zM5-Xn-Yz8" firstAttribute="top" secondItem="nro-1y-9Bm" secondAttribute="top" id="F1I-5Q-DHq"/>
+                                    <constraint firstAttribute="bottom" secondItem="zM5-Xn-Yz8" secondAttribute="bottom" id="OJZ-ng-e7N"/>
+                                    <constraint firstItem="JGC-rh-W91" firstAttribute="top" secondItem="nro-1y-9Bm" secondAttribute="top" id="SGU-lJ-2gb"/>
+                                    <constraint firstAttribute="height" constant="50" id="aod-sQ-H7Z"/>
+                                    <constraint firstItem="JGC-rh-W91" firstAttribute="leading" secondItem="nro-1y-9Bm" secondAttribute="leading" id="glO-Oh-fau"/>
+                                    <constraint firstItem="JGC-rh-W91" firstAttribute="width" secondItem="nro-1y-9Bm" secondAttribute="width" multiplier="1:2" id="jrM-Xo-QBI"/>
+                                    <constraint firstItem="BL7-u1-n3l" firstAttribute="leading" secondItem="JGC-rh-W91" secondAttribute="trailing" id="n7f-8f-A0t"/>
+                                    <constraint firstItem="BL7-u1-n3l" firstAttribute="top" secondItem="nro-1y-9Bm" secondAttribute="top" id="pj9-b2-f1Z"/>
+                                    <constraint firstAttribute="trailing" secondItem="zM5-Xn-Yz8" secondAttribute="trailing" id="pyX-rd-qWL"/>
+                                    <constraint firstAttribute="bottom" secondItem="BL7-u1-n3l" secondAttribute="bottom" id="xpC-6B-XTq"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="osS-Cj-cES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nro-1y-9Bm" firstAttribute="centerX" secondItem="83g-nI-YMr" secondAttribute="centerX" id="4u7-5T-9i1"/>
+                            <constraint firstItem="nro-1y-9Bm" firstAttribute="width" secondItem="83g-nI-YMr" secondAttribute="width" multiplier="1:2" id="5A2-RL-shQ"/>
+                            <constraint firstItem="nro-1y-9Bm" firstAttribute="top" secondItem="osS-Cj-cES" secondAttribute="top" constant="16" id="BTw-ga-mG2"/>
+                            <constraint firstItem="T1H-9W-7to" firstAttribute="leading" secondItem="83g-nI-YMr" secondAttribute="leading" id="CZD-9M-kvo"/>
+                            <constraint firstItem="T1H-9W-7to" firstAttribute="top" secondItem="83g-nI-YMr" secondAttribute="top" id="Yuh-YT-Ktb"/>
+                            <constraint firstAttribute="bottom" secondItem="T1H-9W-7to" secondAttribute="bottom" id="clb-hK-dhS"/>
+                            <constraint firstAttribute="trailing" secondItem="T1H-9W-7to" secondAttribute="trailing" id="oYj-gg-8N6"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="T1H-9W-7to" id="CqW-cc-4Kv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RC9-P6-Eg6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1752" y="313"/>
+        </scene>
+    </scenes>
+</document>
