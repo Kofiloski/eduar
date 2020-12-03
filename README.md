@@ -27,6 +27,6 @@ Make sure you have all requirements :)
 
 - open Terminal
 - git clone https://github.com/Kofiloski/eduar/
-- cd eduar
+- cd eduar/EduAR
 - pod install
 - open EduAR.xcworkspace
