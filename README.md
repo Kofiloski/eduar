@@ -8,7 +8,7 @@ The idea is for the educational institution(teacher) to determine how to deliver
 Each game screen uses different aspects of the AR capabilities of the app. The games are the following:
 
 1. The first game 'Find Max' displays a random location around you and guides you through AR. Once the user reaches the location it displays the dog in AR.
-2. 'Build Setup' as second game that lets you build a computer setup on a flat surface in-front. (Keyboard, mouse, monitor... etc). This has functionality of rotating the object, moving(placing) it and enlarging or shrinking it. Tap on the flat surface to place the object.
+2. 'Build Setup' as second game that lets you build a computer setup on a flat surface in-front. (Keyboard, mouse, monitor... etc). This has functionality of rotating the object, moving(placing) it and enlarging or shrinking it. Select object from the list then tap on the flat surface to place the object. Make sure you have enough lighting on the surface otherwise the device won't detect it.
 3. 'See Robot' is a native iOS AR viewer subbclassed from QLPreviewController, that previews the object or presents it in AR.
 4. The AR objects(plants) are placed randomly around the user when playing "Plants are Life".
 
