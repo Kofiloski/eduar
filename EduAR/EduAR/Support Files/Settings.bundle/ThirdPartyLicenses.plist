@@ -6,17 +6,9 @@
 	<array>
 		<dict>
 			<key>File</key>
-			<string>ThirdPartyLicenses/AMPopTip</string>
+			<string>ThirdPartyLicenses/ARCL</string>
 			<key>Title</key>
-			<string>AMPopTip</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>ThirdPartyLicenses/TouchDraw</string>
-			<key>Title</key>
-			<string>TouchDraw</string>
+			<string>ARCL</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>

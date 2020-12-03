@@ -8,6 +8,7 @@
 import UIKit
 import ARKit
 import SceneKit
+import os
 
 class ARController: UIViewController {
     
@@ -90,10 +91,6 @@ class ARController: UIViewController {
     @IBAction func dismiss() {
         dismiss(animated: true)
     }
-    
-    deinit {
-        print("DEINIT ARController")
-    }
 }
 
 // MARK: AR Delegate
@@ -112,7 +109,7 @@ extension ARController: ARSCNViewDelegate {
 extension ARController {
     private func fillComputerPartsList() {
         guard let urls = retrieveURLFromAssets() else {
-            print("Could not retrieve UR from assets.")
+            os_log("Could not retrieve URL from assets.", log: .default, type: .fault)
             return
         }
         
@@ -155,7 +152,6 @@ extension ARController {
         let tapLocation = sender.location(in: sceneView)
         let hitTest = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
         if !hitTest.isEmpty {
-            print("Touched on the plane")
             guard let transformMatrix = hitTest.first?.worldTransform,
                   let scene = SCNScene(named: "ComputerParts.scnassets/\(selectedComputerPart).scn") else {
                 return
@@ -164,7 +160,7 @@ extension ARController {
             let vector = SCNVector3(transformMatrix.columns.3.x, transformMatrix.columns.3.y, transformMatrix.columns.3.z)
             addARScene(scene, childNodeName: selectedComputerPart, at: vector)
         } else {
-            print("Not a plane")
+            // Not a flat surface (plane).
         }
     }
     
@@ -199,9 +195,9 @@ extension ARController {
             coordy = hitNodeResult.worldCoordinates.y
             coordz = hitNodeResult.worldCoordinates.z
         case .changed:
-            // when you start to pan in screen with your finger
-            // hittest gives new coordinates of touched location in sceneView
-            // coord-pcoord gives distance to move or distance paned in sceneView
+            // triggered when you start to move the finger on the screen.
+            // hittest gives the coordinates of touched location in sceneView.
+            // coords give the distance to move in sceneView.
             let hitNode = sceneView.hitTest(sender.location(in: sceneView))
             if let hitNodeCoordx = hitNode.first?.worldCoordinates.x,
                let hitNodeCoordy = hitNode.first?.worldCoordinates.y,
@@ -233,13 +229,13 @@ extension ARController {
 extension ARController {
     private func placeNatureObjectsAroundUser() {
         guard let natureObjectsURLs = retrieveURLFromAssets() else {
-            print("Could not retrieve URLs from assets.")
+            os_log("Could not retrieve nature URLs from assets.", log: .default, type: .error)
             return
         }
         
         for url in natureObjectsURLs {
             guard let scene = try? SCNScene(url: url) else {
-                print("Failed to create scene for url: \(url).")
+                os_log("Failed to create scene for url: %@.", log: .default, type: .error, url.description)
                 return
             }
             

@@ -9,12 +9,14 @@ import Foundation
 import CoreLocation
 
 struct EventTrigger {
+    
     var isLocationTriggered: Bool
     var longitude: Double
     var latitude: Double
     var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
+    
     var title: String
     var contentIsImage: Bool
     var contentIsAR: Bool
@@ -22,6 +24,7 @@ struct EventTrigger {
 }
 
 extension EventTrigger: Codable {
+    
     init(json: [String: Any]) throws {
         guard let locationTriggered = json["locationTriggered"] as? Bool else {
             throw SerializationError.missing("locationTriggered")

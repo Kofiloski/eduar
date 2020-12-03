@@ -9,8 +9,9 @@ import UIKit
 import MapKit
 import CoreLocation
 import UserNotifications
+import os
 
-protocol MapControllerDelegate: class {
+protocol MapControllerNotifierDelegate: class {
     func reachedDestination()
     func retrievedRoutes(routes: [MKRoute])
 }
@@ -28,11 +29,11 @@ class MapController: UIViewController {
         return locationManager
     }()
     
-    private lazy var notificationCenter: UNUserNotificationCenter = {
+    private var notificationCenter: UNUserNotificationCenter = {
         return UNUserNotificationCenter.current()
     }()
     
-    weak var delegate: MapControllerDelegate?
+    weak var delegate: MapControllerNotifierDelegate?
     
     private var mapSetup = false
     private var reachedDestination = false
@@ -45,102 +46,7 @@ class MapController: UIViewController {
         // delegate?.reachedDestination()
     }
     
-    private func setupMapRegion() {
-        if let location = locationManager.location {
-            let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-            mapView.camera.centerCoordinate = location.coordinate
-            mapView.showsUserLocation = true
-            mapView.setRegion(region, animated: false)
-            mapView.centerCoordinate = location.coordinate
-            zoom()
-        }
-    }
-    
-    private func zoom() {
-        var region: MKCoordinateRegion = mapView.region
-        var span: MKCoordinateSpan = mapView.region.span
-        span.latitudeDelta *= 0.2
-        span.longitudeDelta *= 0.2
-        region.span = span
-        mapView.setRegion(region, animated: true)
-        mapSetup = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.calculateRandomLocationBasedOnCurrentLocation()
-        }
-    }
-    
-    private func calculateRandomLocationBasedOnCurrentLocation() {
-        let randomNumber = Int.random(in: 500..<550) // To approximate between 500 and 550, this is not too close so we can get a path, and not too far so the user doesn't have to walk too much.
-        let centerMapPoint = CGPoint(x: mapView.center.x + CGFloat(randomNumber), y: mapView.center.y + CGFloat(randomNumber))
-        let centerMapCoordinate = mapView.convert(centerMapPoint, toCoordinateFrom: mapView)
-        
-        guard let locationLat = locationManager.location?.coordinate.latitude,
-              let locationLon = locationManager.location?.coordinate.longitude else {
-            print("Failed to get current user location lat. and lot.")
-            return
-        }
-        
-        let randomBetweenNumbers = { (firstNumber: Float, secondNumber: Float) -> Float in
-            return Float(arc4random()) / Float(UINT32_MAX) * abs(firstNumber - secondNumber) + min(firstNumber, secondNumber)
-        }
-        
-        let latRange = randomBetweenNumbers(Float(centerMapCoordinate.latitude), Float(locationLat))
-        let longRange = randomBetweenNumbers(Float(centerMapCoordinate.longitude), Float(locationLon))
-        let location = CLLocationCoordinate2D(latitude: CLLocationDegrees(latRange), longitude: CLLocationDegrees(longRange))
-        
-        addPinToMap(on: location)
-        createAndMonitorRegion(centerLocation: location)
-    }
-    
-    private func addPinToMap(on location: CLLocationCoordinate2D) {
-        let pin = MKPointAnnotation()
-        pin.coordinate = location
-        pin.title = "Max"
-        mapView.addAnnotation(pin)
-        calculateDirectionsTo(endAnnotation: pin)
-    }
-    
-    private func createAndMonitorRegion(centerLocation: CLLocationCoordinate2D) {
-        let region = CLCircularRegion(center: centerLocation, radius: 0.5, identifier: "Pinregion")
-        // Waiting for the location manager to stabilize with location then add monitoring to avoid false positives of user entering the region
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.locationManager.startMonitoring(for: region)
-        }
-    }
-    
-    private func calculateDirectionsTo(endAnnotation: MKAnnotation) {
-        let destinationPlacemark = MKPlacemark(coordinate: endAnnotation.coordinate)
-        let destinationMapItem = MKMapItem(placemark: destinationPlacemark)
-        
-        let directionRequest = MKDirections.Request()
-        directionRequest.source = MKMapItem.forCurrentLocation()
-        directionRequest.transportType = .walking
-        directionRequest.destination = destinationMapItem
-        directionRequest.requestsAlternateRoutes = false
-        
-        let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response, error) in
-            guard let response = response,
-                  let route = response.routes.first,
-                  error == nil else {
-                print("Error: \(error!)")
-                return
-            }
-          
-            self.delegate?.retrievedRoutes(routes: response.routes)
-            self.showRouteOnMap(route)
-        }
-    }
-    
-    private func showRouteOnMap(_ route: MKRoute) {
-        for overlay in mapView.overlays {
-            mapView.removeOverlay(overlay)
-        }
-        
-        mapView.addOverlay(route.polyline, level: .aboveRoads)
-        let rect = route.polyline.boundingMapRect
-        mapView.setRegion(MKCoordinateRegion(rect), animated: true)
-    }
+    // MARK: Notifications Handling
     
     private func checkNotificationStatus() {
         notificationCenter.getNotificationSettings { settings in
@@ -171,6 +77,113 @@ class MapController: UIViewController {
         present(alertController, animated: true)
     }
     
+    // MARK: Setting up map
+    
+    private func setupMapRegion() {
+        guard let location = locationManager.location else {
+            return
+        }
+        
+        let region = MKCoordinateRegion(center: location.coordinate,
+                                        span: MKCoordinateSpan(latitudeDelta: 0.01,
+                                                               longitudeDelta: 0.01))
+        mapView.camera.centerCoordinate = location.coordinate
+        mapView.showsUserLocation = true
+        mapView.setRegion(region, animated: false)
+        mapView.centerCoordinate = location.coordinate
+        zoom()
+    }
+    
+    private func zoom() {
+        var region = mapView.region
+        var span = mapView.region.span
+        span.latitudeDelta *= 0.2
+        span.longitudeDelta *= 0.2
+        region.span = span
+        mapView.setRegion(region, animated: true)
+        mapSetup = true
+        // Waiting for the animation of mapView.setRegion to finish.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.calculateRandomLocationBasedOnCurrentLocation()
+        }
+    }
+    
+    /// Takes user current location from the map and selects random location between 500 and 550, and adds a pin on that location.
+    /// To approximate between 500 and 550, this is not too close so we can get a path, and not too far so the user doesn't have to walk too much.
+    private func calculateRandomLocationBasedOnCurrentLocation() {
+        let randomNumber = Int.random(in: 500..<550)
+        let centerMapPoint = CGPoint(x: mapView.center.x + CGFloat(randomNumber), y: mapView.center.y + CGFloat(randomNumber))
+        let centerMapCoordinate = mapView.convert(centerMapPoint, toCoordinateFrom: mapView)
+        
+        guard let locationLat = locationManager.location?.coordinate.latitude,
+              let locationLon = locationManager.location?.coordinate.longitude else {
+            os_log("Error: Failed to get current user location lat. and lot.", log: .default, type: .info)
+            return
+        }
+        
+        let randomBetweenNumbers = { (firstNumber: Float, secondNumber: Float) -> Float in
+            return Float(arc4random()) / Float(UINT32_MAX) * abs(firstNumber - secondNumber) + min(firstNumber, secondNumber)
+        }
+        
+        let latRange = randomBetweenNumbers(Float(centerMapCoordinate.latitude), Float(locationLat))
+        let longRange = randomBetweenNumbers(Float(centerMapCoordinate.longitude), Float(locationLon))
+        let location = CLLocationCoordinate2D(latitude: CLLocationDegrees(latRange), longitude: CLLocationDegrees(longRange))
+        
+        addPinToMap(on: location)
+        createAndMonitorRegion(centerLocation: location)
+    }
+    
+    private func addPinToMap(on location: CLLocationCoordinate2D) {
+        let pin = MKPointAnnotation()
+        pin.coordinate = location
+        pin.title = "Max"
+        mapView.addAnnotation(pin)
+        calculateDirectionsTo(endAnnotation: pin)
+    }
+    
+    private func createAndMonitorRegion(centerLocation: CLLocationCoordinate2D) {
+        let region = CLCircularRegion(center: centerLocation, radius: 0.5, identifier: "Pinregion")
+        // Waiting for the location manager to stabilize with location.
+        // After that add monitoring to avoid false positives of user entering the region.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.locationManager.startMonitoring(for: region)
+        }
+    }
+    
+    private func calculateDirectionsTo(endAnnotation: MKAnnotation) {
+        let destinationPlacemark = MKPlacemark(coordinate: endAnnotation.coordinate)
+        let destinationMapItem = MKMapItem(placemark: destinationPlacemark)
+        
+        let directionRequest = MKDirections.Request()
+        directionRequest.source = MKMapItem.forCurrentLocation()
+        directionRequest.transportType = .walking
+        directionRequest.destination = destinationMapItem
+        directionRequest.requestsAlternateRoutes = false
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { (response, error) in
+            guard let response = response,
+                  let route = response.routes.first,
+                  error == nil else {
+                os_log("Error: %@", log: .default, type: .error, String(describing: error))
+                return
+            }
+            
+            self.delegate?.retrievedRoutes(routes: response.routes)
+            self.showRouteOnMap(route)
+        }
+    }
+    
+    private func showRouteOnMap(_ route: MKRoute) {
+        for overlay in mapView.overlays {
+            mapView.removeOverlay(overlay)
+        }
+        
+        mapView.addOverlay(route.polyline, level: .aboveRoads)
+        let rect = route.polyline.boundingMapRect
+        mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+    }
+    
     private func presentNotification() {
         let content = UNMutableNotificationContent()
         content.title = "You found Max"
@@ -190,10 +203,6 @@ class MapController: UIViewController {
             delegate?.reachedDestination()
         }
     }
-    
-    deinit {
-        print("DEINIT MapController")
-    }
 }
 
 // MARK: CLLocationManagerDelegate
@@ -205,7 +214,7 @@ extension MapController: CLLocationManagerDelegate {
         }
     }
     
-    // Note: Often gives false positives
+    // Note: Gives false positives
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if let region = region as? CLCircularRegion,
            region.identifier == "Pinregion" {
@@ -213,7 +222,7 @@ extension MapController: CLLocationManagerDelegate {
         }
     }
     
-    // Note: Often gives false positives
+    // Note: Gives false positives
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         if let region = region as? CLCircularRegion,
            region.identifier == "Pinregion",

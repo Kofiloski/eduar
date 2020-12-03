@@ -94,13 +94,9 @@ class ARDirectionsController: UIViewController {
         super.viewWillDisappear(animated)
         sceneLocationView.pause()
     }
-    
-    deinit {
-        print("DEINIT ARDirectionsController")
-    }
 }
 
-extension ARDirectionsController: MapControllerDelegate {
+extension ARDirectionsController: MapControllerNotifierDelegate {
     func retrievedRoutes(routes: [MKRoute]) {
         self.routes = routes
     }

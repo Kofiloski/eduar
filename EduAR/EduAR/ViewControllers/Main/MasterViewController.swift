@@ -59,8 +59,4 @@ class MasterViewController: UIViewController {
     @IBAction func dismiss() {
         dismiss(animated: true)
     }
-    
-    deinit {
-        print("DEINIT MasterViewController")
-    }
 }

@@ -147,9 +147,9 @@
                                     <action selector="buildSetup" destination="sqt-Dg-xIw" eventType="touchUpInside" id="BQa-U1-Poi"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJH-QR-0tK" userLabel="Trees are Life">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uJH-QR-0tK" userLabel="Plants are Life">
                                 <rect key="frame" x="207" y="448" width="207" height="448"/>
-                                <state key="normal" title="Trees are Life"/>
+                                <state key="normal" title="Plants are Life"/>
                                 <connections>
                                     <action selector="treesAreLife" destination="sqt-Dg-xIw" eventType="touchUpInside" id="db7-68-WEy"/>
                                 </connections>

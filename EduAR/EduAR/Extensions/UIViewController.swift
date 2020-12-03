@@ -14,6 +14,8 @@ extension UIViewController {
     /// - Returns
     ///   instance of the UIViewController it is called upon.
     static func instantiate(storyboardName: String) -> Self {
-        UIStoryboard(name: storyboardName, bundle: nil).instantiateViewController(withIdentifier: String(describing: self)) as! Self
+        let storyboard = UIStoryboard(name: storyboardName, bundle: .main)
+        let identifier = String(describing: self)
+        return storyboard.instantiateViewController(withIdentifier: identifier) as! Self
     }
 }

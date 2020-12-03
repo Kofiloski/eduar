@@ -98,29 +98,25 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		1A3FF90622A6DA41003B508A /* Core */ = {
+		1A3FF90622A6DA41003B508A /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				6F626CCC257966AA0099545B /* ARAssets */,
 				1A8D180923F6A18B00AB766B /* EduAR.entitlements */,
 				1A53A52C2294674F00AC93E8 /* AppDelegate.swift */,
 				1AF0FEDB247408270095BBEA /* Settings.bundle */,
-				1A3C3FC92402F315005C85EB /* toy_robot_vintage.usdz */,
-				1A4DAE5C232170960018033D /* Animals.scnassets */,
-				1A8B4CEA231D982500C885DE /* NatureObjects.scnassets */,
-				1ADE1A6F23159ED100782E8B /* ComputerParts.scnassets */,
 				1A3C3FCB2402F450005C85EB /* Icons.xcassets */,
 				1A53A53B2294675000AC93E8 /* Info.plist */,
 			);
-			path = Core;
+			path = "Support Files";
 			sourceTree = "<group>";
 		};
 		1A3FF90722A6DA67003B508A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				6FA51BD72546128E0000386C /* AugmentedReality */,
+				6F626CCB257966330099545B /* Main */,
 				6FA51BD6254612860000386C /* Map */,
-				1A81D4E2230DD77B003C1AA7 /* HomeViewController.swift */,
-				1A74F6BD231144B400B2AD1E /* MasterViewController.swift */,
+				6FA51BD72546128E0000386C /* AugmentedReality */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -173,7 +169,7 @@
 				1A3FF90922A6DB19003B508A /* Models */,
 				1A3FF90822A6DA7E003B508A /* Storyboards */,
 				1A3FF90722A6DA67003B508A /* ViewControllers */,
-				1A3FF90622A6DA41003B508A /* Core */,
+				1A3FF90622A6DA41003B508A /* Support Files */,
 			);
 			path = EduAR;
 			sourceTree = "<group>";
@@ -186,6 +182,26 @@
 				1A53B8C023EE188300EFDD10 /* Subject.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		6F626CCB257966330099545B /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				1A81D4E2230DD77B003C1AA7 /* HomeViewController.swift */,
+				1A74F6BD231144B400B2AD1E /* MasterViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		6F626CCC257966AA0099545B /* ARAssets */ = {
+			isa = PBXGroup;
+			children = (
+				1A3C3FC92402F315005C85EB /* toy_robot_vintage.usdz */,
+				1A4DAE5C232170960018033D /* Animals.scnassets */,
+				1A8B4CEA231D982500C885DE /* NatureObjects.scnassets */,
+				1ADE1A6F23159ED100782E8B /* ComputerParts.scnassets */,
+			);
+			path = ARAssets;
 			sourceTree = "<group>";
 		};
 		6FA51BD6254612860000386C /* Map */ = {
@@ -519,11 +535,11 @@
 			baseConfigurationReference = FDCC25575571E82DABE36C43 /* Pods-EduAR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = EduAR/Core/EduAR.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "EduAR/Support Files/EduAR.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PY736RW2VJ;
-				INFOPLIST_FILE = "$(SRCROOT)/EduAR/Core/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EduAR/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -542,11 +558,11 @@
 			baseConfigurationReference = C2CA31753A829CCBA7C096A7 /* Pods-EduAR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = EduAR/Core/EduAR.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "EduAR/Support Files/EduAR.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PY736RW2VJ;
-				INFOPLIST_FILE = "$(SRCROOT)/EduAR/Core/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/EduAR/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

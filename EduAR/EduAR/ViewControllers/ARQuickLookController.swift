@@ -29,10 +29,6 @@ class ARQuickLookController: QLPreviewController {
         }
         return NSURL(fileURLWithPath: path)
     }
-    
-    deinit {
-        print("DEINIT ARQuickLookController")
-    }
 }
 
 extension ARQuickLookController: QLPreviewControllerDataSource {
